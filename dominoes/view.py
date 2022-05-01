@@ -1,3 +1,5 @@
-from dominoes.model import generate_pieces_random_order
+from dominoes.model import stock_pieces, computer_pieces, player_pieces
 
-print("Stock pieces:", generate_pieces_random_order())
+print("Stock pieces:", stock_pieces)
+print("Computer pieces:", computer_pieces)
+print("Player pieces:", player_pieces)
