@@ -2,8 +2,14 @@ from itertools import combinations_with_replacement
 from random import shuffle
 
 INITIAL_PLAYER_PIECES = 7
-PLAYER1 = "P1"
-PLAYER2 = "P2"
+PLAYER1 = "P1"  # computer
+PLAYER2 = "P2"  # player
+
+domino_snake = []
+stock_pieces = ...
+player1_pieces = ...
+player2_pieces = ...
+current_player = ...
 
 
 def __generate_pieces():
@@ -28,7 +34,8 @@ def __get_initial_player_and_piece(p1_pieces, p2_pieces):
 
     def get_initial_player_and_piece(p1_initial_piece, p2_initial_piece):
         if p1_initial_piece and p2_initial_piece:
-            return (PLAYER1, p1_initial_piece) if p1_initial_piece[0] > p2_initial_piece[0] else (PLAYER2, p2_initial_piece)
+            return (PLAYER1, p1_initial_piece) if p1_initial_piece[0] > p2_initial_piece[0] else (
+                PLAYER2, p2_initial_piece)
         elif p1_initial_piece and not p2_initial_piece:
             return PLAYER1, p1_initial_piece
         elif p2_initial_piece and not p1_initial_piece:
@@ -42,6 +49,28 @@ def __get_initial_player_and_piece(p1_pieces, p2_pieces):
     )
 
 
-stock_pieces = __shuffle_pieces(__generate_pieces())
-computer_pieces = __pop_n_pieces(INITIAL_PLAYER_PIECES, stock_pieces)
-player_pieces = __pop_n_pieces(INITIAL_PLAYER_PIECES, stock_pieces)
+def __get_player_pieces_by_player(player):
+    return player1_pieces if player == PLAYER1 else player2_pieces
+
+
+def __make_move(player, piece):
+    global current_player
+    __get_player_pieces_by_player(player).remove(piece)
+    domino_snake.append(piece)
+    current_player = PLAYER1 if player == PLAYER2 else PLAYER2
+
+
+def start_game():
+    def init_fields_and_make_initial_move():
+        global stock_pieces, player1_pieces, player2_pieces
+        while True:
+            stock_pieces = __shuffle_pieces(__generate_pieces())
+            player1_pieces = __pop_n_pieces(INITIAL_PLAYER_PIECES, stock_pieces)
+            player2_pieces = __pop_n_pieces(INITIAL_PLAYER_PIECES, stock_pieces)
+            initial_player_and_piece = __get_initial_player_and_piece(player1_pieces, player2_pieces)
+
+            if initial_player_and_piece:
+                __make_move(initial_player_and_piece[0], initial_player_and_piece[1])
+                break
+
+    init_fields_and_make_initial_move()

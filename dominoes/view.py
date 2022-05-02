@@ -1,5 +1,18 @@
-from dominoes.model import stock_pieces, computer_pieces, player_pieces
+def show_stock_pieces(pieces):
+    print("Stock pieces:", pieces)
 
-print("Stock pieces:", stock_pieces)
-print("Computer pieces:", computer_pieces)
-print("Player pieces:", player_pieces)
+
+def show_computer_pieces(pieces):
+    print("Computer pieces:", pieces)
+
+
+def show_player_pieces(pieces):
+    print("Player pieces:", pieces)
+
+
+def show_domino_snake(pieces):
+    print("Domino snake:", pieces)
+
+
+def show_status(player):
+    print("Status:", player)
