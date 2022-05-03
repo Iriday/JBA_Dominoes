@@ -4,11 +4,12 @@ import model as m
 
 def run_game():
     m.start_game()
-    v.show_stock_pieces(m.stock_pieces)
-    v.show_computer_pieces(m.player1_pieces)
+    v.show_header()
+    v.show_stock_size(len(m.stock_pieces))
+    v.show_computer_pieces_size(len(m.player1_pieces))
+    v.show_game_field(m.game_field)
     v.show_player_pieces(m.player2_pieces)
-    v.show_domino_snake(m.domino_snake)
-    v.show_status("player" if m.current_player == m.PLAYER2 else "computer")
+    v.show_status(m.current_player)
 
 
 run_game()

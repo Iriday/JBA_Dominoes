@@ -5,7 +5,7 @@ INITIAL_PLAYER_PIECES = 7
 PLAYER1 = "P1"  # computer
 PLAYER2 = "P2"  # player
 
-domino_snake = []
+game_field = []
 stock_pieces = ...
 player1_pieces = ...
 player2_pieces = ...
@@ -56,7 +56,7 @@ def __get_player_pieces_by_player(player):
 def __make_move(player, piece):
     global current_player
     __get_player_pieces_by_player(player).remove(piece)
-    domino_snake.append(piece)
+    game_field.append(piece)
     current_player = PLAYER1 if player == PLAYER2 else PLAYER2
 
 
