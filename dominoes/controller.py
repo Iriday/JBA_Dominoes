@@ -9,7 +9,12 @@ def run_game():
     v.show_computer_pieces_size(len(m.player1_pieces))
     v.show_game_field(m.game_field)
     v.show_player_pieces(m.player2_pieces)
-    v.show_status(m.current_player)
+
+    if m.current_player == m.PLAYER1:
+        v.show_computer_status()
+    elif m.current_player == m.PLAYER2:
+        v.show_player_status()
+        v.get_piece_number(len(m.player2_pieces))
 
 
 run_game()

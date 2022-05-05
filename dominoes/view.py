@@ -21,6 +21,21 @@ def show_player_pieces(pieces):
     print()
 
 
-def show_status(player):
-    print("Status:",
-          "It's your turn to make a move. Enter your command." if player == "P2" else "Computer is about to make a move. Press enter to continue...")
+def show_computer_status():
+    print("Status: Computer is about to make a move. Press enter to continue...")
+
+
+def show_player_status():
+    print("Status: It's your turn to make a move. Enter your command.")
+
+
+def get_piece_number(num_of_player_pieces):
+    while True:
+        try:
+            num = int(input().strip())
+            if abs(num) <= num_of_player_pieces:
+                return num
+        except ValueError:
+            pass
+
+        print("Invalid input. Please try again.")
