@@ -1,5 +1,5 @@
 from itertools import combinations_with_replacement
-from random import shuffle
+from random import shuffle, randint
 
 INITIAL_PLAYER_PIECES = 7
 PLAYER1 = "P1"  # computer
@@ -78,6 +78,14 @@ def take_piece_from_stock_and_give_to_player(player_pieces, stock_pieces_):
         player_pieces.append(stock_pieces_.pop(-1))
         return True
     return False
+
+
+def get_random_piece_number(player_pieces_len):
+    return randint(-player_pieces_len, player_pieces_len)
+
+
+def get_current_player_pieces():
+    return player1_pieces if current_player == PLAYER1 else player2_pieces
 
 
 def start_game():
