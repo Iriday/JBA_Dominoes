@@ -14,7 +14,12 @@ def run_game():
         v.show_computer_status()
     elif m.current_player == m.PLAYER2:
         v.show_player_status()
-        v.get_piece_number(len(m.player2_pieces))
+        piece_number = v.get_piece_number(len(m.player2_pieces))
+        piece = m.get_piece_by_number(m.player2_pieces, piece_number)
+        side = m.calc_field_side_by_piece_number(piece_number)
+        m.make_move(m.PLAYER2, piece, side)
+
+    v.show_game_field(m.game_field)
 
 
 run_game()

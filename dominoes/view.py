@@ -11,7 +11,7 @@ def show_computer_pieces_size(size):
 
 
 def show_game_field(pieces):
-    print("", *pieces, "", sep="\n")
+    print("\n", *pieces, "\n", sep="")
 
 
 def show_player_pieces(pieces):

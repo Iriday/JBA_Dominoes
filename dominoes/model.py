@@ -4,6 +4,8 @@ from random import shuffle
 INITIAL_PLAYER_PIECES = 7
 PLAYER1 = "P1"  # computer
 PLAYER2 = "P2"  # player
+LEFT = "LEFT"
+RIGHT = "RIGHT"
 
 game_field = []
 stock_pieces = ...
@@ -53,10 +55,21 @@ def __get_player_pieces_by_player(player):
     return player1_pieces if player == PLAYER1 else player2_pieces
 
 
-def __make_move(player, piece):
+def get_piece_by_number(pieces, num):
+    return pieces[abs(num) - 1]
+
+
+def calc_field_side_by_piece_number(num):
+    return LEFT if num < 0 else RIGHT
+
+
+def make_move(player, piece, side):
     global current_player
     __get_player_pieces_by_player(player).remove(piece)
-    game_field.append(piece)
+    if side == RIGHT:
+        game_field.append(piece)
+    elif side == LEFT:
+        game_field.insert(0, piece)
     current_player = PLAYER1 if player == PLAYER2 else PLAYER2
 
 
@@ -70,7 +83,7 @@ def start_game():
             initial_player_and_piece = __get_initial_player_and_piece(player1_pieces, player2_pieces)
 
             if initial_player_and_piece:
-                __make_move(initial_player_and_piece[0], initial_player_and_piece[1])
+                make_move(initial_player_and_piece[0], initial_player_and_piece[1], RIGHT)
                 break
 
     init_fields_and_make_initial_move()
