@@ -73,6 +73,13 @@ def make_move(player, piece, side):
     current_player = PLAYER1 if player == PLAYER2 else PLAYER2
 
 
+def take_piece_from_stock_and_give_to_player(player_pieces, stock_pieces_):
+    if stock_pieces_:
+        player_pieces.append(stock_pieces_.pop(-1))
+        return True
+    return False
+
+
 def start_game():
     def init_fields_and_make_initial_move():
         global stock_pieces, player1_pieces, player2_pieces
