@@ -19,7 +19,10 @@ def run_game():
                 v.show_computer_win()
             elif winner == m.PLAYER2:
                 v.show_player_win()
-            break
+            return
+        elif m.is_draw():
+            v.show_draw()
+            return
 
         # make move
         piece_number = ...

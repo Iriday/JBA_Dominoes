@@ -37,6 +37,10 @@ def show_computer_win():
     print("Status: The game is over. The computer won!")
 
 
+def show_draw():
+    print("Status: The game is over. It's a draw!")
+
+
 def get_piece_number(num_of_player_pieces):
     while True:
         try:

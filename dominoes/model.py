@@ -1,5 +1,6 @@
 from itertools import combinations_with_replacement
 from random import shuffle, randint
+import numpy as np
 
 INITIAL_PLAYER_PIECES = 7
 PLAYER1 = "P1"  # computer
@@ -95,6 +96,12 @@ def get_winner_if_win():
         return PLAYER2
     else:
         return None
+
+
+def is_draw():
+    return len(game_field) >= 7 \
+           and game_field[0][0] == game_field[-1][-1] \
+           and np.count_nonzero(np.array(game_field) == game_field[0][0]) == 8
 
 
 def start_game():
