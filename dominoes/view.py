@@ -11,7 +11,7 @@ def show_computer_pieces_size(size):
 
 
 def show_game_field(pieces):
-    print("\n", *pieces, "\n", sep="")
+    print("\n", *(pieces if len(pieces) <= 6 else pieces[:3] + ["..."] + pieces[-3:]), "\n", sep="")
 
 
 def show_player_pieces(pieces):
