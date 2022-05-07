@@ -29,6 +29,14 @@ def show_player_status():
     print("Status: It's your turn to make a move. Enter your command.")
 
 
+def show_player_win():
+    print("Status: The game is over. You won!")
+
+
+def show_computer_win():
+    print("Status: The game is over. The computer won!")
+
+
 def get_piece_number(num_of_player_pieces):
     while True:
         try:

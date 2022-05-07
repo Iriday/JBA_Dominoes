@@ -5,12 +5,23 @@ import model as m
 def run_game():
     m.start_game()
     while True:
+        # show state
         v.show_header()
         v.show_stock_size(len(m.stock_pieces))
         v.show_computer_pieces_size(len(m.player1_pieces))
         v.show_game_field(m.game_field)
         v.show_player_pieces(m.player2_pieces)
 
+        # game over check
+        winner = m.get_winner_if_win()
+        if winner:
+            if winner == m.PLAYER1:
+                v.show_computer_win()
+            elif winner == m.PLAYER2:
+                v.show_player_win()
+            break
+
+        # make move
         piece_number = ...
         if m.current_player == m.PLAYER1:
             v.show_computer_status()

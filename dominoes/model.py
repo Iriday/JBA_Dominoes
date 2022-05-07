@@ -88,6 +88,15 @@ def get_current_player_pieces():
     return player1_pieces if current_player == PLAYER1 else player2_pieces
 
 
+def get_winner_if_win():
+    if not player1_pieces:
+        return PLAYER1
+    elif not player2_pieces:
+        return PLAYER2
+    else:
+        return None
+
+
 def start_game():
     def init_fields_and_make_initial_move():
         global stock_pieces, player1_pieces, player2_pieces
