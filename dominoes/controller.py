@@ -28,6 +28,7 @@ def run_game():
         piece_number = ...
         if m.current_player == m.PLAYER1:
             v.show_computer_status()
+            v.get_any_input()
             piece_number = m.get_random_piece_number(len(m.player1_pieces))
         elif m.current_player == m.PLAYER2:
             v.show_player_status()

@@ -51,3 +51,7 @@ def get_piece_number(num_of_player_pieces):
             pass
 
         print("Invalid input. Please try again.")
+
+
+def get_any_input():
+    return input()
