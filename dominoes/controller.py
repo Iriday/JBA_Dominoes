@@ -25,21 +25,30 @@ def run_game():
             return
 
         # make move
-        piece_number = ...
         if m.current_player == m.PLAYER1:
             v.show_computer_status()
             v.get_any_input()
-            piece_number = m.get_random_piece_number(len(m.player1_pieces))
+            piece_number = m.get_random_piece_number(len(m.get_current_player_pieces()))
+            if piece_number == 0:
+                m.take_piece_from_stock_and_give_to_player()
+            else:
+                piece = m.get_piece_by_number(m.get_current_player_pieces(), piece_number)
+                side = m.calc_field_side_by_piece_number(piece_number)
+                m.make_move(piece, side)
         elif m.current_player == m.PLAYER2:
             v.show_player_status()
-            piece_number = v.get_piece_number(len(m.get_current_player_pieces()))
-
-        if piece_number == 0:
-            m.take_piece_from_stock_and_give_to_player()
-        else:
-            piece = m.get_piece_by_number(m.get_current_player_pieces(), piece_number)
-            side = m.calc_field_side_by_piece_number(piece_number)
-            m.make_move(piece, side)
+            while True:
+                piece_number = v.get_piece_number(len(m.get_current_player_pieces()))
+                if piece_number == 0:
+                    m.take_piece_from_stock_and_give_to_player()
+                    break
+                elif m.is_piece_can_be_placed_on_field(piece_number):
+                    piece = m.get_piece_by_number(m.get_current_player_pieces(), piece_number)
+                    side = m.calc_field_side_by_piece_number(piece_number)
+                    m.make_move(piece, side)
+                    break
+                else:
+                    v.show_illegal_move_err()
 
 
 run_game()

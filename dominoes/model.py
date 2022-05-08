@@ -92,6 +92,11 @@ def get_current_player_pieces():
     return player1_pieces if current_player == PLAYER1 else player2_pieces
 
 
+def is_piece_can_be_placed_on_field(piece_number):
+    piece = get_piece_by_number(get_current_player_pieces(), piece_number)
+    return (piece_number < 0 and game_field[0][0] in piece) or (piece_number > 0 and game_field[-1][-1] in piece)
+
+
 def get_winner_if_win():
     if not player1_pieces:
         return PLAYER1

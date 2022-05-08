@@ -41,6 +41,10 @@ def show_draw():
     print("Status: The game is over. It's a draw!")
 
 
+def show_illegal_move_err():
+    print("Illegal move. Please try again.")
+
+
 def get_piece_number(num_of_player_pieces):
     while True:
         try:
