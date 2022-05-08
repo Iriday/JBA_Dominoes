@@ -56,6 +56,11 @@ def __get_player_pieces_by_player(player):
     return player1_pieces if player == PLAYER1 else player2_pieces
 
 
+def __switch_player():
+    global current_player
+    current_player = PLAYER1 if current_player == PLAYER2 else PLAYER2
+
+
 def get_piece_by_number(pieces, num):
     return pieces[abs(num) - 1]
 
@@ -64,21 +69,19 @@ def calc_field_side_by_piece_number(num):
     return LEFT if num < 0 else RIGHT
 
 
-def make_move(player, piece, side):
-    global current_player
-    __get_player_pieces_by_player(player).remove(piece)
+def make_move(piece, side):
+    __get_player_pieces_by_player(current_player).remove(piece)
     if side == RIGHT:
         game_field.append(piece)
     elif side == LEFT:
         game_field.insert(0, piece)
-    current_player = PLAYER1 if player == PLAYER2 else PLAYER2
+    __switch_player()
 
 
-def take_piece_from_stock_and_give_to_player(player_pieces, stock_pieces_):
-    if stock_pieces_:
-        player_pieces.append(stock_pieces_.pop(-1))
-        return True
-    return False
+def take_piece_from_stock_and_give_to_player():
+    if stock_pieces:
+        get_current_player_pieces().append(stock_pieces.pop(-1))
+    __switch_player()
 
 
 def get_random_piece_number(player_pieces_len):
@@ -106,7 +109,7 @@ def is_draw():
 
 def start_game():
     def init_fields_and_make_initial_move():
-        global stock_pieces, player1_pieces, player2_pieces
+        global stock_pieces, player1_pieces, player2_pieces, current_player
         while True:
             stock_pieces = __shuffle_pieces(__generate_pieces())
             player1_pieces = __pop_n_pieces(INITIAL_PLAYER_PIECES, stock_pieces)
@@ -114,7 +117,8 @@ def start_game():
             initial_player_and_piece = __get_initial_player_and_piece(player1_pieces, player2_pieces)
 
             if initial_player_and_piece:
-                make_move(initial_player_and_piece[0], initial_player_and_piece[1], RIGHT)
+                current_player = initial_player_and_piece[0]
+                make_move(initial_player_and_piece[1], RIGHT)
                 break
 
     init_fields_and_make_initial_move()

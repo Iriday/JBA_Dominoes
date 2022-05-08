@@ -35,11 +35,11 @@ def run_game():
             piece_number = v.get_piece_number(len(m.get_current_player_pieces()))
 
         if piece_number == 0:
-            m.take_piece_from_stock_and_give_to_player(m.get_current_player_pieces(), m.stock_pieces)
+            m.take_piece_from_stock_and_give_to_player()
         else:
             piece = m.get_piece_by_number(m.get_current_player_pieces(), piece_number)
             side = m.calc_field_side_by_piece_number(piece_number)
-            m.make_move(m.current_player, piece, side)
+            m.make_move(piece, side)
 
 
 run_game()
