@@ -80,8 +80,8 @@ def __make_initial_move(piece):
 
 
 def make_move(move_num):
-    # if not is_move_possible(move_num):
-    # return
+    if not is_move_possible(move_num):
+        raise ValueError()
     if move_num == 0:
         take_piece_from_stock_and_give_to_curr_player()
     else:
