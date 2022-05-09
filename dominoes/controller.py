@@ -15,37 +15,23 @@ def run_game():
         # game over check
         winner = m.get_winner_if_win()
         if winner:
-            if winner == m.PLAYER1:
-                v.show_computer_win()
-            elif winner == m.PLAYER2:
-                v.show_player_win()
+            v.show_win(winner)
             return
         elif m.is_draw():
             v.show_draw()
             return
 
         # make move
-        if m.current_player == m.PLAYER1:
-            v.show_computer_status()
+        v.show_status(m.get_current_player())
+        if m.get_current_player() == m.PLAYER1:
             v.get_any_input()
-            piece_number = m.get_random_piece_number(len(m.get_current_player_pieces()))
-            if piece_number == 0:
-                m.take_piece_from_stock_and_give_to_player()
-            else:
-                piece = m.get_piece_by_number(m.get_current_player_pieces(), piece_number)
-                side = m.calc_field_side_by_piece_number(piece_number)
-                m.make_move(piece, side)
-        elif m.current_player == m.PLAYER2:
-            v.show_player_status()
+            move_num = m.get_random_move_num(len(m.get_current_player_pieces()))
+            m.make_move(move_num)
+        elif m.get_current_player() == m.PLAYER2:
             while True:
-                piece_number = v.get_piece_number(len(m.get_current_player_pieces()))
-                if piece_number == 0:
-                    m.take_piece_from_stock_and_give_to_player()
-                    break
-                elif m.is_piece_can_be_placed_on_field(piece_number):
-                    piece = m.get_piece_by_number(m.get_current_player_pieces(), piece_number)
-                    side = m.calc_field_side_by_piece_number(piece_number)
-                    m.make_move(piece, side)
+                move_num = v.get_move_num(len(m.get_current_player_pieces()))
+                if m.is_move_possible(move_num):
+                    m.make_move(move_num)
                     break
                 else:
                     v.show_illegal_move_err()

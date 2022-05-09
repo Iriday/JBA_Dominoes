@@ -12,7 +12,7 @@ game_field = []
 stock_pieces = ...
 player1_pieces = ...
 player2_pieces = ...
-current_player = ...
+__current_player = ...
 
 
 def __generate_pieces():
@@ -57,11 +57,15 @@ def __get_player_pieces_by_player(player):
 
 
 def __switch_player():
-    global current_player
-    current_player = PLAYER1 if current_player == PLAYER2 else PLAYER2
+    global __current_player
+    __current_player = PLAYER1 if __current_player == PLAYER2 else PLAYER2
 
 
-def get_piece_by_number(pieces, num):
+def get_current_player():
+    return __current_player
+
+
+def get_piece_by_piece_number(pieces, num):
     return pieces[abs(num) - 1]
 
 
@@ -69,31 +73,43 @@ def calc_field_side_by_piece_number(num):
     return LEFT if num < 0 else RIGHT
 
 
-def make_move(piece, side):
-    __get_player_pieces_by_player(current_player).remove(piece)
-    if side == RIGHT:
-        game_field.append(piece)
-    elif side == LEFT:
-        game_field.insert(0, piece)
+def __make_initial_move(piece):
+    __get_player_pieces_by_player(get_current_player()).remove(piece)
+    game_field.append(piece)
     __switch_player()
 
 
-def take_piece_from_stock_and_give_to_player():
+def make_move(move_num):
+    # if not is_move_possible(move_num):
+    # return
+    if move_num == 0:
+        take_piece_from_stock_and_give_to_curr_player()
+    else:
+        piece = get_piece_by_piece_number(get_current_player_pieces(), move_num)
+        side = calc_field_side_by_piece_number(move_num)
+        __get_player_pieces_by_player(__current_player).remove(piece)
+        if side == RIGHT:
+            game_field.append(piece)
+        elif side == LEFT:
+            game_field.insert(0, piece)
+    __switch_player()
+
+
+def take_piece_from_stock_and_give_to_curr_player():
     if stock_pieces:
         get_current_player_pieces().append(stock_pieces.pop(-1))
-    __switch_player()
 
 
-def get_random_piece_number(player_pieces_len):
+def get_random_move_num(player_pieces_len):
     return randint(-player_pieces_len, player_pieces_len)
 
 
 def get_current_player_pieces():
-    return player1_pieces if current_player == PLAYER1 else player2_pieces
+    return player1_pieces if __current_player == PLAYER1 else player2_pieces
 
 
-def is_piece_can_be_placed_on_field(piece_number):
-    piece = get_piece_by_number(get_current_player_pieces(), piece_number)
+def __is_piece_of_curr_player_can_be_placed_on_field(piece_number):
+    piece = get_piece_by_piece_number(get_current_player_pieces(), piece_number)
     return (piece_number < 0 and game_field[0][0] in piece) or (piece_number > 0 and game_field[-1][-1] in piece)
 
 
@@ -112,9 +128,13 @@ def is_draw():
            and np.count_nonzero(np.array(game_field) == game_field[0][0]) == 8
 
 
+def is_move_possible(move_num):
+    return move_num == 0 or (move_num != 0 and __is_piece_of_curr_player_can_be_placed_on_field(move_num))
+
+
 def start_game():
     def init_fields_and_make_initial_move():
-        global stock_pieces, player1_pieces, player2_pieces, current_player
+        global stock_pieces, player1_pieces, player2_pieces, __current_player
         while True:
             stock_pieces = __shuffle_pieces(__generate_pieces())
             player1_pieces = __pop_n_pieces(INITIAL_PLAYER_PIECES, stock_pieces)
@@ -122,8 +142,8 @@ def start_game():
             initial_player_and_piece = __get_initial_player_and_piece(player1_pieces, player2_pieces)
 
             if initial_player_and_piece:
-                current_player = initial_player_and_piece[0]
-                make_move(initial_player_and_piece[1], RIGHT)
+                __current_player = initial_player_and_piece[0]
+                __make_initial_move(initial_player_and_piece[1])
                 break
 
     init_fields_and_make_initial_move()
