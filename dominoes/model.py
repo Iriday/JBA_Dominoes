@@ -5,8 +5,6 @@ import numpy as np
 INITIAL_PLAYER_PIECES = 7
 PLAYER1 = "P1"  # computer
 PLAYER2 = "P2"  # player
-LEFT = "LEFT"
-RIGHT = "RIGHT"
 
 game_field = []
 stock_pieces = ...
@@ -69,10 +67,6 @@ def get_piece_by_piece_number(pieces, num):
     return pieces[abs(num) - 1]
 
 
-def calc_field_side_by_piece_number(num):
-    return LEFT if num < 0 else RIGHT
-
-
 def __make_initial_move(piece):
     __get_player_pieces_by_player(get_current_player()).remove(piece)
     game_field.append(piece)
@@ -86,11 +80,10 @@ def make_move(move_num):
         take_piece_from_stock_and_give_to_curr_player()
     else:
         piece = get_piece_by_piece_number(get_current_player_pieces(), move_num)
-        side = calc_field_side_by_piece_number(move_num)
         __get_player_pieces_by_player(__current_player).remove(piece)
-        if side == RIGHT:
+        if move_num > 0:
             game_field.append(piece)
-        elif side == LEFT:
+        elif move_num < 0:
             game_field.insert(0, piece)
     __switch_player()
 
