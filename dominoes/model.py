@@ -73,22 +73,30 @@ def __make_initial_move(piece):
     __switch_player()
 
 
+def __place_piece_on_game_field(piece_num):
+    piece = get_piece_by_piece_number(get_current_player_pieces(), piece_num)
+    get_current_player_pieces().remove(piece)
+    if piece_num > 0:
+        game_field.append(piece)
+        if game_field[-1][-2] != game_field[-2][-1]:
+            game_field[-1].reverse()
+    elif piece_num < 0:
+        game_field.insert(0, piece)
+        if game_field[0][1] != game_field[1][0]:
+            game_field[0].reverse()
+
+
 def make_move(move_num):
     if not is_move_possible(move_num):
         raise ValueError()
     if move_num == 0:
-        take_piece_from_stock_and_give_to_curr_player()
+        __take_piece_from_stock_and_give_to_curr_player()
     else:
-        piece = get_piece_by_piece_number(get_current_player_pieces(), move_num)
-        __get_player_pieces_by_player(__current_player).remove(piece)
-        if move_num > 0:
-            game_field.append(piece)
-        elif move_num < 0:
-            game_field.insert(0, piece)
+        __place_piece_on_game_field(move_num)
     __switch_player()
 
 
-def take_piece_from_stock_and_give_to_curr_player():
+def __take_piece_from_stock_and_give_to_curr_player():
     if stock_pieces:
         get_current_player_pieces().append(stock_pieces.pop(-1))
 
