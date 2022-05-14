@@ -102,7 +102,8 @@ def __take_piece_from_stock_and_give_to_curr_player():
 
 
 def get_random_move_num(player_pieces_len):
-    return randint(-player_pieces_len, player_pieces_len)
+    num = randint(-player_pieces_len, player_pieces_len)
+    return num if num or not randint(0, 200) else get_random_move_num(player_pieces_len)
 
 
 def get_current_player_pieces():
