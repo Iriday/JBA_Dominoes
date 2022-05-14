@@ -25,11 +25,13 @@ def run_game():
         v.show_status(m.get_current_player())
         if m.get_current_player() == m.PLAYER1:
             v.get_any_input()
-            while True:
-                move_num = m.get_random_move_num(len(m.get_current_player_pieces()))
-                if m.is_move_possible(move_num):
-                    m.make_move(move_num)
+            for piece in m.prioritise_pieces(m.count_numbers(m.game_field, m.get_current_player_pieces()), m.get_current_player_pieces()):
+                move_num = m.get_move_num_by_piece(piece, m.get_current_player_pieces(), m.game_field)
+                if move_num:
                     break
+            else:
+                move_num = 0
+            m.make_move(move_num)
         elif m.get_current_player() == m.PLAYER2:
             while True:
                 move_num = v.get_move_num(len(m.get_current_player_pieces()))

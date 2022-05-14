@@ -1,5 +1,6 @@
 from itertools import combinations_with_replacement
 from random import shuffle, randint
+from collections import Counter
 import numpy as np
 
 INITIAL_PLAYER_PIECES = 7
@@ -149,3 +150,25 @@ def start_game():
                 break
 
     init_fields_and_make_initial_move()
+
+
+# AI
+
+def count_numbers(game_filed_, player_pieces):
+    return Counter(np.array(game_filed_ + player_pieces).flatten())
+
+
+def prioritise_pieces(counted_nums, player_pieces):
+    priority_piece = [[counted_nums[p[0]] + counted_nums[p[1]], p] for p in player_pieces]
+    priority_piece.sort(key=lambda v: v[0], reverse=True)
+    return [piece for _, piece in priority_piece]
+
+
+def get_move_num_by_piece(piece, player_pieces, game_field_):
+    if piece in player_pieces:
+        i = player_pieces.index(piece) + 1
+        if game_field_[-1][-1] in piece:
+            return i
+        elif game_field_[0][0] in piece:
+            return -i
+    return 0
