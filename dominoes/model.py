@@ -1,5 +1,5 @@
 from itertools import combinations_with_replacement
-from random import shuffle
+from random import shuffle, randint
 from collections import Counter
 import numpy as np
 
@@ -23,8 +23,11 @@ def __shuffle_pieces(pieces):
     return pieces
 
 
-def __pop_n_pieces(n, pieces):
-    return [pieces.pop() for _ in range(n)]
+def __pop_n_random_pieces(n, pieces):
+    rand_pieces = []
+    while len(rand_pieces) < n:
+        rand_pieces.append(pieces.pop(randint(0, len(pieces) - 1)))
+    return rand_pieces
 
 
 def __get_initial_player_and_piece(p1_pieces, p2_pieces):
@@ -136,8 +139,8 @@ def start_game():
         global stock_pieces, player1_pieces, player2_pieces, __current_player
         while True:
             stock_pieces = __shuffle_pieces(__generate_pieces())
-            player1_pieces = __pop_n_pieces(INITIAL_PLAYER_PIECES, stock_pieces)
-            player2_pieces = __pop_n_pieces(INITIAL_PLAYER_PIECES, stock_pieces)
+            player1_pieces = __pop_n_random_pieces(INITIAL_PLAYER_PIECES, stock_pieces)
+            player2_pieces = __pop_n_random_pieces(INITIAL_PLAYER_PIECES, stock_pieces)
             initial_player_and_piece = __get_initial_player_and_piece(player1_pieces, player2_pieces)
 
             if initial_player_and_piece:
