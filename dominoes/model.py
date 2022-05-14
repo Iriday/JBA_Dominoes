@@ -1,5 +1,5 @@
 from itertools import combinations_with_replacement
-from random import shuffle, randint
+from random import shuffle
 from collections import Counter
 import numpy as np
 
@@ -60,23 +60,13 @@ def __switch_player():
     __current_player = PLAYER1 if __current_player == PLAYER2 else PLAYER2
 
 
-def get_current_player():
-    return __current_player
-
-
-def get_piece_by_piece_number(pieces, num):
+def __get_piece_by_piece_number(pieces, num):
     return pieces[abs(num) - 1]
 
 
-def __make_initial_move(piece):
-    __get_player_pieces_by_player(get_current_player()).remove(piece)
-    game_field.append(piece)
-    __switch_player()
-
-
 def __place_piece_on_game_field(piece_num):
-    piece = get_piece_by_piece_number(get_current_player_pieces(), piece_num)
-    get_current_player_pieces().remove(piece)
+    piece = __get_piece_by_piece_number(__get_current_player_pieces(), piece_num)
+    __get_current_player_pieces().remove(piece)
     if piece_num > 0:
         game_field.append(piece)
         if game_field[-1][-2] != game_field[-2][-1]:
@@ -87,33 +77,43 @@ def __place_piece_on_game_field(piece_num):
             game_field[0].reverse()
 
 
+def __take_piece_from_stock_and_give_to_curr_player():
+    if stock_pieces:
+        __get_current_player_pieces().append(stock_pieces.pop(-1))
+
+
+def __get_current_player_pieces():
+    return player1_pieces if __current_player == PLAYER1 else player2_pieces
+
+
+def __is_piece_of_curr_player_can_be_placed_on_field(piece_number):
+    piece = __get_piece_by_piece_number(__get_current_player_pieces(), piece_number)
+    return (piece_number < 0 and game_field[0][0] in piece) or (piece_number > 0 and game_field[-1][-1] in piece)
+
+
+def __is_move_possible(move_num):
+    return move_num == 0 or (move_num != 0 and __is_piece_of_curr_player_can_be_placed_on_field(move_num))
+
+
+def __make_initial_move(piece):
+    __get_player_pieces_by_player(get_current_player()).remove(piece)
+    game_field.append(piece)
+    __switch_player()
+
+
 def make_move(move_num):
-    if not is_move_possible(move_num):
-        raise ValueError()
+    if not __is_move_possible(move_num):
+        return False
     if move_num == 0:
         __take_piece_from_stock_and_give_to_curr_player()
     else:
         __place_piece_on_game_field(move_num)
     __switch_player()
+    return True
 
 
-def __take_piece_from_stock_and_give_to_curr_player():
-    if stock_pieces:
-        get_current_player_pieces().append(stock_pieces.pop(-1))
-
-
-def get_random_move_num(player_pieces_len):
-    num = randint(-player_pieces_len, player_pieces_len)
-    return num if num or not randint(0, 200) else get_random_move_num(player_pieces_len)
-
-
-def get_current_player_pieces():
-    return player1_pieces if __current_player == PLAYER1 else player2_pieces
-
-
-def __is_piece_of_curr_player_can_be_placed_on_field(piece_number):
-    piece = get_piece_by_piece_number(get_current_player_pieces(), piece_number)
-    return (piece_number < 0 and game_field[0][0] in piece) or (piece_number > 0 and game_field[-1][-1] in piece)
+def get_current_player():
+    return __current_player
 
 
 def get_winner_if_win():
@@ -129,10 +129,6 @@ def is_draw():
     return len(game_field) >= 7 \
            and game_field[0][0] == game_field[-1][-1] \
            and np.count_nonzero(np.array(game_field) == game_field[0][0]) == 8
-
-
-def is_move_possible(move_num):
-    return move_num == 0 or (move_num != 0 and __is_piece_of_curr_player_can_be_placed_on_field(move_num))
 
 
 def start_game():
@@ -154,17 +150,17 @@ def start_game():
 
 # AI
 
-def count_numbers(game_filed_, player_pieces):
+def __count_numbers(game_filed_, player_pieces):
     return Counter(np.array(game_filed_ + player_pieces).flatten())
 
 
-def prioritise_pieces(counted_nums, player_pieces):
+def __prioritise_pieces(counted_nums, player_pieces):
     priority_piece = [[counted_nums[p[0]] + counted_nums[p[1]], p] for p in player_pieces]
     priority_piece.sort(key=lambda v: v[0], reverse=True)
     return [piece for _, piece in priority_piece]
 
 
-def get_move_num_by_piece(piece, player_pieces, game_field_):
+def __get_move_num_by_piece(piece, player_pieces, game_field_):
     if piece in player_pieces:
         i = player_pieces.index(piece) + 1
         if game_field_[-1][-1] in piece:
@@ -172,3 +168,14 @@ def get_move_num_by_piece(piece, player_pieces, game_field_):
         elif game_field_[0][0] in piece:
             return -i
     return 0
+
+
+def make_computer_move():
+    if get_current_player() == PLAYER1:
+        for piece in __prioritise_pieces(__count_numbers(game_field, __get_current_player_pieces()), __get_current_player_pieces()):
+            move_num = __get_move_num_by_piece(piece, __get_current_player_pieces(), game_field)
+            if move_num:
+                break
+        else:
+            move_num = 0
+        make_move(move_num)
